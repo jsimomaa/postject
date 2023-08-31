@@ -16,7 +16,8 @@ async function inject(filename, resourceName, resourceData, options) {
 
   try {
     await fs.access(filename, constants.R_OK | constants.W_OK);
-  } catch {
+  } catch (e) {
+    console.error("Can't read and write to target executable", e);
     throw new Error("Can't read and write to target executable");
   }
 
@@ -26,7 +27,8 @@ async function inject(filename, resourceName, resourceData, options) {
 
   try {
     executable = await fs.readFile(filename);
-  } catch {
+  } catch (e) {
+    console.error("Couldn't read target executable", e);
     throw new Error("Couldn't read target executable");
   }
   const executableFormat = postject.getExecutableFormat(executable);
@@ -155,7 +157,8 @@ async function inject(filename, resourceName, resourceData, options) {
 
   try {
     await fs.writeFile(filename, buffer);
-  } catch {
+  } catch (e) {
+    console.error("Couldn't write executable", e);
     throw new Error("Couldn't write executable");
   }
 }
